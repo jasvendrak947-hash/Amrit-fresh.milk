@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amrit Fresh Milk</title>
+<style>
+:root{--green:#176b45;--light:#eef7f1;--line:#dce5df;--text:#18231d;--muted:#637169;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;background:#f5f7f6;color:var(--text)}
+header{background:var(--green);color:white;padding:18px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-size:21px;margin:0}header p{margin:4px 0 0;color:#e2f3e8;font-size:13px}
+button,select,input,textarea{font:inherit}button{border:0;border-radius:9px;padding:10px 13px;cursor:pointer;background:var(--green);color:white;font-weight:600}
+button.secondary{background:#e9efeb;color:#1d392a}button.danger{background:#fff0ef;color:var(--red)}button.small{padding:6px 9px;font-size:12px}
+main{max-width:1180px;margin:auto;padding:16px}.notice{font-size:13px;color:var(--muted);margin:0 0 14px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.card,.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:14px}.card .label{font-size:13px;color:var(--muted)}.card .value{font-size:23px;font-weight:750;margin-top:5px}.card .sub{font-size:12px;color:var(--muted);margin-top:3px}
+.tabs{display:flex;gap:8px;overflow:auto;margin:18px 0 12px}.tabs button{white-space:nowrap}.tabs button.active{background:#0b4d2e}
+.layout{display:grid;grid-template-columns:minmax(280px, .85fr) minmax(0,1.5fr);gap:12px}.panel h2{font-size:17px;margin:0 0 12px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}.field label{font-size:13px;font-weight:650}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #cbd6ce;border-radius:8px;background:white;color:var(--text)}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #edf0ee;vertical-align:top}th{color:var(--muted);font-weight:650;background:#fafcfb}td .sub{display:block;color:var(--muted);font-size:11px;margin-top:3px}.table-wrap{overflow:auto}.empty{padding:24px;text-align:center;color:var(--muted)}
+.hidden{display:none!important}.pill{font-size:11px;padding:3px 7px;border-radius:20px;background:var(--light);color:var(--green)}.foot{font-size:12px;color:var(--muted);padding:18px 0}
+.bill-paper{background:#fff;color:#17231c;border:1px solid #dce5df;border-radius:12px;padding:18px;max-width:620px;margin:auto}.bill-paper h3{text-align:center;color:#176b45;margin:0}.bill-paper .bill-brand{text-align:center;color:#176b45;font-weight:800;font-size:20px}.bill-paper .bill-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:12px 0}.bill-paper table{margin:10px 0}.bill-total{font-weight:800;font-size:18px;text-align:right;margin-top:12px}.bill-paper .tagline{text-align:center;font-size:11px;color:#637169;margin-top:14px}\n@media(max-width:850px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}}
+@media(max-width:480px){main{padding:10px}.card{padding:11px}.card .value{font-size:20px}th,td{padding:8px 6px}}
+</style>
+
+<style>
+#authGate{position:fixed;inset:0;z-index:99999;background:#f4f8f5;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.auth-card{width:min(100%,440px);background:white;border:1px solid #dce5df;border-radius:20px;padding:24px;box-shadow:0 12px 40px #183d2920}
+.auth-card h2{color:#176b45;margin:0 0 6px;font-size:25px}.auth-card p{color:#637169;font-size:14px}.auth-card .field{margin:12px 0}.auth-card input,.auth-card select{width:100%;padding:12px;border:1px solid #cbd6ce;border-radius:9px}.auth-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.auth-actions button{flex:1}.auth-switch{background:transparent;color:#176b45;text-decoration:underline;padding:8px}.auth-error{color:#b42318;font-size:13px;white-space:pre-wrap}.auth-note{font-size:12px!important;background:#eef7f1;padding:10px;border-radius:8px}
+body.auth-locked #appHeader,body.auth-locked #appMain{visibility:hidden}
+</style>
+</head>
+<body class="auth-locked">
+<div id="authGate"><div class="auth-card">
+  <div style="font-size:38px">🥛</div><h2>Amrit Fresh Milk</h2><p>सुरक्षित लॉगिन • Secure sign in</p>
+  <div class="auth-actions"><button id="showLogin" type="button">लॉगिन / Login</button><button id="showRegister" type="button" class="secondary">रजिस्ट्रेशन / Register</button></div>
+  <form id="authForm">
+    <div id="registerFields" class="hidden">
+      <div class="field"><label>नाम / Name</label><input id="regName" autocomplete="name" placeholder="अपना नाम" /></div>
+      <div class="field"><label>मोबाइल नंबर / Mobile</label><input id="regPhone" inputmode="tel" autocomplete="tel" placeholder="10 अंकों का मोबाइल नंबर" /></div>
+      <div class="field"><label>ईमेल आईडी / Email</label><input id="regEmail" type="email" autocomplete="email" placeholder="name@example.com" /></div>
+      <div class="field"><label>पासवर्ड / Password</label><input id="regPassword" type="password" autocomplete="new-password" minlength="8" placeholder="कम से कम 8 अक्षर" /></div>
+    </div>
+    <div id="loginFields">
+      <div class="field"><label>मोबाइल या ईमेल / Mobile or email</label><input id="loginIdentifier" autocomplete="username" placeholder="मोबाइल नंबर या ईमेल" /></div>
+      <div class="field"><label>पासवर्ड / Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="पासवर्ड" /></div>
+    </div>
+    <div id="otpFields" class="hidden"><div class="field"><label>ईमेल पर आया OTP / Email OTP</label><input id="otpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6 अंकों का OTP" /></div><p class="auth-note">OTP की वैधता 10 मिनट है। अधिकतम 3 फोन लॉगिन रह सकते हैं। चौथा लॉगिन सबसे पुराने फोन को लॉगआउट करेगा।</p></div>
+    <div id="authError" class="auth-error" role="alert"></div>
+    <div class="auth-actions"><button id="primaryAuth" type="submit">लॉगिन करें</button><button id="resendOtp" type="button" class="secondary hidden">OTP फिर भेजें</button></div>
+  </form>
+  <p class="auth-note">नोट: OTP भेजने के लिए ऐप के सर्वर पर ईमेल सेवा सेट करना आवश्यक है। अभी डेटा एंट्री का हिस्सा स्थानीय ब्राउज़र में सेव होता है, सभी फोन के बीच ऑनलाइन सिंक अभी शामिल नहीं है।</p>
+</div></div>
+<header id="appHeader"><div><h1 id="appTitle">🥛 Amrit Fresh Milk</h1><p id="tagline">खरीद • बिक्री • भुगतान • उधारी • महीनेदारी</p></div><button class="secondary" id="langBtn" onclick="toggleLang()">English</button></header>
+<main id="appMain">
+<p class="notice" id="localNotice">ध्यान दें: दूध के रिकॉर्ड अभी इसी फोन/ब्राउज़र में सेव होते हैं। अकाउंट लॉगिन सर्वर पर सत्यापित होता है।</p>
+<section class="cards">
+ <div class="card"><div class="label" data-hi="आज दूध खरीदा" data-en="Milk purchased today">आज दूध खरीदा</div><div class="value" id="todayBuyLitres">0 L</div><div class="sub" id="todayBuyMoney">₹0 खरीद लागत</div></div>
+ <div class="card"><div class="label" data-hi="आज दूध बेचा" data-en="Milk sold today">आज दूध बेचा</div><div class="value" id="todaySellLitres">0 L</div><div class="sub" id="todaySellMoney">₹0 बिक्री</div></div>
+ <div class="card"><div class="label" data-hi="आज पैसा आया" data-en="Money received today">आज पैसा आया</div><div class="value" id="todayReceived">₹0</div><div class="sub" data-hi="दर्ज प्राप्त भुगतान" data-en="Recorded receipts">दर्ज प्राप्त भुगतान</div></div>
+ <div class="card"><div class="label" data-hi="आज पैसा दिया" data-en="Money paid today">आज पैसा दिया</div><div class="value" id="todayPaid">₹0</div><div class="sub" data-hi="दर्ज किए गए भुगतान" data-en="Recorded payments">दर्ज किए गए भुगतान</div></div>
+</section>
+<section class="cards" style="margin-top:10px">
+ <div class="card"><div class="label" data-hi="ग्राहकों से लेना है" data-en="Customer balance due">ग्राहकों से लेना है</div><div class="value" id="receivable">₹0</div></div>
+ <div class="card"><div class="label" data-hi="विक्रेताओं को देना है" data-en="Supplier balance due">विक्रेताओं को देना है</div><div class="value" id="payable">₹0</div></div>
+ <div class="card"><div class="label" data-hi="इस महीने की बिक्री" data-en="Sales this month">इस महीने की बिक्री</div><div class="value" id="monthSales">₹0</div></div>
+ <div class="card"><div class="label" data-hi="इस महीने की खरीद" data-en="Purchases this month">इस महीने की खरीद</div><div class="value" id="monthPurchases">₹0</div></div>
+</section>
+<nav class="tabs">
+<button class="active" data-tab="dashboard" onclick="showTab('dashboard',this)" data-hi="डैशबोर्ड" data-en="Dashboard">डैशबोर्ड</button>
+<button data-tab="people" onclick="showTab('people',this)" data-hi="लोग जोड़ें" data-en="People">लोग जोड़ें</button>
+<button data-tab="milk" onclick="showTab('milk',this)" data-hi="दूध खरीद/बिक्री" data-en="Milk entries">दूध खरीद/बिक्री</button>
+<button data-tab="money" onclick="showTab('money',this)" data-hi="पैसा लेन-देन" data-en="Payments">पैसा लेन-देन</button>
+<button data-tab="reports" onclick="showTab('reports',this)" data-hi="रिपोर्ट" data-en="Reports">रिपोर्ट</button>
+<button data-tab="bill" onclick="showTab('bill',this)" data-hi="महीने का बिल" data-en="Monthly bill">महीने का बिल</button>
+</nav>
+<section id="tab-dashboard" class="panel">
+<h2 data-hi="हाल की एंट्री" data-en="Recent entries">हाल की एंट्री</h2><div id="recent"></div>
+<div class="foot" data-hi="सलाह: हर भुगतान का उद्देश्य और तरीका दर्ज करें। सुधार करने पर रिकॉर्ड का इतिहास रखना प्रोडक्शन संस्करण में जोड़ा जाएगा।" data-en="Tip: Record the purpose and method for every payment. Audit history for edits will be added in the production version.">सलाह: हर भुगतान का उद्देश्य और तरीका दर्ज करें। सुधार करने पर रिकॉर्ड का इतिहास रखना प्रोडक्शन संस्करण में जोड़ा जाएगा।</div>
+</section>
+<section id="tab-people" class="layout hidden">
+<div class="panel"><h2 data-hi="ग्राहक / विक्रेता जोड़ें" data-en="Add customer / supplier">ग्राहक / विक्रेता जोड़ें</h2>
+<form id="personForm"><input type="hidden" id="personId"><div class="field"><label data-hi="प्रकार" data-en="Type">प्रकार</label><select id="personType"><option value="customer">ग्राहक / Customer</option><option value="supplier">भैंस वाला / दूध विक्रेता</option><option value="employee">कर्मचारी / Employee</option><option value="other">अन्य / Other</option></select></div>
+<div class="field"><label data-hi="नाम" data-en="Name">नाम</label><input id="personName" required></div>
+<div class="field"><label data-hi="मोबाइल नंबर" data-en="Mobile number">मोबाइल नंबर</label><input id="personPhone" inputmode="tel"></div>
+<div class="field"><label data-hi="पता / नोट" data-en="Address / note">पता / नोट</label><input id="personAddress"></div>
+<div class="field"><label data-hi="डिफ़ॉल्ट दूध भाव (₹/लीटर)" data-en="Default milk rate (₹/litre)">डिफ़ॉल्ट दूध भाव (₹/लीटर)</label><input id="personRate" type="number" min="0" step=".01"></div>
+<div class="actions"><button type="submit" data-hi="सेव करें" data-en="Save">सेव करें</button><button type="button" class="secondary" onclick="resetPerson()" data-hi="रद्द करें" data-en="Cancel">रद्द करें</button></div></form></div>
+<div class="panel"><h2 data-hi="लोगों की सूची" data-en="People list">लोगों की सूची</h2><div class="table-wrap" id="peopleTable"></div></div>
+</section>
+<section id="tab-milk" class="layout hidden">
+<div class="panel"><h2 data-hi="दूध खरीद / बिक्री एंट्री" data-en="Milk purchase / sale entry">दूध खरीद / बिक्री एंट्री</h2>
+<form id="milkForm"><input type="hidden" id="milkId">
+<div class="field"><label data-hi="एंट्री का प्रकार" data-en="Entry type">एंट्री का प्रकार</label><select id="milkType"><option value="purchase">खरीद / Purchase</option><option value="sale">बिक्री / Sale</option></select></div>
+<div class="field"><label data-hi="ग्राहक या विक्रेता" data-en="Customer or supplier">ग्राहक या विक्रेता</label><select id="milkPerson" required></select></div>
+<div class="row"><div class="field"><label data-hi="तारीख" data-en="Date">तारीख</label><input id="milkDate" type="date" required></div><div class="field"><label data-hi="समय" data-en="Session">समय</label><select id="milkSession"><option value="morning">सुबह / Morning</option><option value="evening">शाम / Evening</option><option value="other">अन्य / Other</option></select></div></div>
+<div class="row"><div class="field"><label data-hi="लीटर" data-en="Litres">लीटर</label><input id="milkLitres" type="number" min=".01" step=".01" required></div><div class="field"><label data-hi="भाव ₹/लीटर" data-en="Rate ₹/litre">भाव ₹/लीटर</label><input id="milkRate" type="number" min="0" step=".01" required></div></div>
+<div class="field"><label data-hi="नोट" data-en="Note">नोट</label><input id="milkNote" placeholder="वैकल्पिक / Optional"></div>
+<div class="field"><label><input type="checkbox" id="milkPaid" style="width:auto"> <span data-hi="पूरी रकम उसी समय चुकाई/ली गई" data-en="Fully paid/received at entry time">पूरी रकम उसी समय चुकाई/ली गई</span></label></div>
+<div class="actions"><button type="submit" data-hi="एंट्री सेव करें" data-en="Save entry">एंट्री सेव करें</button><button type="button" class="secondary" onclick="resetMilk()" data-hi="रद्द करें" data-en="Cancel">रद्द करें</button></div></form></div>
+<div class="panel"><h2 data-hi="दूध की एंट्री" data-en="Milk entries">दूध की एंट्री</h2><div class="table-wrap" id="milkTable"></div></div>
+</section>
+<section id="tab-money" class="layout hidden">
+<div class="panel"><h2 data-hi="पैसा प्राप्त / भुगतान एंट्री" data-en="Receipt / payment entry">पैसा प्राप्त / भुगतान एंट्री</h2>
+<form id="moneyForm"><input type="hidden" id="moneyId">
+<div class="field"><label data-hi="लेन-देन" data-en="Transaction">लेन-देन</label><select id="moneyType"><option value="received">पैसा आया / Received</option><option value="paid">पैसा दिया / Paid</option><option value="expense">बिजनेस खर्च / Business expense</option></select></div>
+<div class="field"><label data-hi="व्यक्ति (यदि लागू हो)" data-en="Person (if applicable)">व्यक्ति (यदि लागू हो)</label><select id="moneyPerson"></select></div>
+<div class="row"><div class="field"><label data-hi="तारीख" data-en="Date">तारीख</label><input id="moneyDate" type="date" required></div><div class="field"><label data-hi="रकम (₹)" data-en="Amount (₹)">रकम (₹)</label><input id="moneyAmount" type="number" min=".01" step=".01" required></div></div>
+<div class="field"><label data-hi="पैसा किस काम के लिए?" data-en="Purpose">पैसा किस काम के लिए?</label><select id="moneyPurpose"><option value="milk">दूध का भुगतान / Milk payment</option><option value="advance">अग्रिम / उधार / Advance</option><option value="recharge">मोबाइल रिचार्ज / Mobile recharge</option><option value="fuel">डीजल / ईंधन / Fuel</option><option value="transport">परिवहन / Transport</option><option value="salary">वेतन / Salary</option><option value="electricity">बिजली / Electricity</option><option value="personal">निजी जरूरत / Personal</option><option value="other">अन्य / Other</option></select></div>
+<div class="row"><div class="field"><label data-hi="भुगतान का तरीका" data-en="Method">भुगतान का तरीका</label><select id="moneyMethod"><option value="cash">नकद / Cash</option><option value="upi">UPI</option><option value="bank">बैंक / Bank</option></select></div><div class="field"><label data-hi="रेफरेंस नंबर (वैकल्पिक)" data-en="Reference (optional)">रेफरेंस नंबर (वैकल्पिक)</label><input id="moneyRef"></div></div>
+<div class="field"><label data-hi="विवरण / नोट" data-en="Details / note">विवरण / नोट</label><textarea id="moneyNote" rows="2" placeholder="जैसे किस महीने का रिचार्ज, किस काम के लिए भुगतान"></textarea></div>
+<div class="actions"><button type="submit" data-hi="लेन-देन सेव करें" data-en="Save transaction">लेन-देन सेव करें</button><button type="button" class="secondary" onclick="resetMoney()" data-hi="रद्द करें" data-en="Cancel">रद्द करें</button></div></form></div>
+<div class="panel"><h2 data-hi="लेन-देन का इतिहास" data-en="Transaction history">लेन-देन का इतिहास</h2><div class="table-wrap" id="moneyTable"></div></div>
+</section>
+<section id="tab-reports" class="panel hidden"><h2 data-hi="दैनिक / मासिक रिपोर्ट" data-en="Daily / monthly report">दैनिक / मासिक रिपोर्ट</h2>
+<div class="row"><div class="field"><label data-hi="रिपोर्ट का प्रकार" data-en="Report period">रिपोर्ट का प्रकार</label><select id="reportPeriod" onchange="renderReports()"><option value="day">आज / Today</option><option value="month">यह महीना / This month</option><option value="all">सभी रिकॉर्ड / All records</option></select></div><div class="field"><label data-hi="तारीख (दैनिक रिपोर्ट के लिए)" data-en="Date (for daily report)">तारीख (दैनिक रिपोर्ट के लिए)</label><input type="date" id="reportDate" onchange="renderReports()"></div></div>
+<div id="reportSummary"></div><div class="actions"><button class="secondary" onclick="exportCSV()" data-hi="CSV रिपोर्ट डाउनलोड करें" data-en="Download CSV report">CSV रिपोर्ट डाउनलोड करें</button><button class="secondary" onclick="window.print()" data-hi="प्रिंट / PDF" data-en="Print / PDF">प्रिंट / PDF</button></div></section>
+
+<section id="tab-bill" class="layout hidden">
+<div class="panel">
+<h2>महीने का बिल / Monthly bill</h2>
+<div class="field"><label>ग्राहक / Customer</label><select id="billPerson"></select></div>
+<div class="row"><div class="field"><label>महीना / Month</label><input id="billMonth" type="month"></div><div class="field"><label>पिछला बकाया (₹) / Previous balance</label><input id="billOpening" type="number" min="0" step=".01" value="0"></div></div>
+<div class="actions"><button onclick="generateBill()">बिल तैयार करें / Generate bill</button></div>
+<div class="actions"><button class="secondary" onclick="downloadBillPDF()">PDF / प्रिंट</button><button class="secondary" onclick="downloadBillImage()">फोटो डाउनलोड</button></div>
+<div class="actions"><button onclick="shareBillWhatsApp()">WhatsApp पर भेजें</button><button class="secondary" onclick="shareBillSMS()">SMS संदेश</button></div>
+<p class="notice">PDF विकल्प प्रिंट विंडो खोलेगा—वहाँ “Save as PDF” चुनें। फोटो डाउनलोड और WhatsApp शेयर के लिए बिल पहले तैयार करें।</p>
+</div>
+<div class="panel"><h2>बिल का पूर्वावलोकन / Bill preview</h2><div id="billPreview" class="empty">ग्राहक और महीना चुनकर बिल तैयार करें।</div></div>
+</section>
+
+<div class="foot">Prototype v0.1 • अभी इस डिवाइस पर स्थानीय सेविंग। उत्पादन में उपयोग से पहले क्लाउड बैकअप, कर्मचारी लॉगिन, अनुमति नियंत्रण और डेटा सुरक्षा जोड़ना आवश्यक है।</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+let lang='hi';
+let db=JSON.parse(localStorage.getItem('dairyPrototypeDB')||'{"people":[],"milk":[],"money":[]}');
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const personName=id=>db.people.find(p=>p.id===id)?.name||'—';
+const typeName=t=>({customer:'ग्राहक',supplier:'दूध विक्रेता',employee:'कर्मचारी',other:'अन्य'}[t]||t);
+const purposeName=t=>({milk:'दूध भुगतान',advance:'अग्रिम / उधार',recharge:'मोबाइल रिचार्ज',fuel:'डीजल / ईंधन',transport:'परिवहन',salary:'वेतन',electricity:'बिजली',personal:'निजी जरूरत',other:'अन्य'}[t]||t);
+function save(){localStorage.setItem('dairyPrototypeDB',JSON.stringify(db));renderAll()}
+function toggleLang(){lang=lang==='hi'?'en':'hi';document.documentElement.lang=lang; $('langBtn').textContent=lang==='hi'?'English':'हिंदी';document.querySelectorAll('[data-hi]').forEach(el=>{el.textContent=el.dataset[lang]});}
+function showTab(tab,btn){document.querySelectorAll('[id^="tab-"]').forEach(e=>e.classList.add('hidden'));$('tab-'+tab).classList.remove('hidden');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function resetPerson(){$('personForm').reset();$('personId').value=''}
+function resetMilk(){$('milkForm').reset();$('milkId').value='';$('milkDate').value=today();refreshPersonOptions()}
+function resetMoney(){$('moneyForm').reset();$('moneyId').value='';$('moneyDate').value=today();refreshPersonOptions()}
+function refreshPersonOptions(){let opts='<option value="">— चुनें / Select —</option>'+db.people.map(p=>`<option value="${p.id}">${esc(p.name)} (${typeName(p.type)})</option>`).join('');$('milkPerson').innerHTML=opts;$('moneyPerson').innerHTML=opts}
+$('personForm').addEventListener('submit',e=>{e.preventDefault();let id=$('personId').value||crypto.randomUUID();let old=db.people.find(p=>p.id===id);let p={id,type:$('personType').value,name:$('personName').value.trim(),phone:$('personPhone').value.trim(),address:$('personAddress').value.trim(),rate:+$('personRate').value||0,created:old?.created||new Date().toISOString(),updated:new Date().toISOString()};if(old)db.people=db.people.map(x=>x.id===id?p:x);else db.people.push(p);resetPerson();save()});
+$('milkForm').addEventListener('submit',e=>{e.preventDefault();let id=$('milkId').value||crypto.randomUUID(),old=db.milk.find(x=>x.id===id);let item={id,type:$('milkType').value,personId:$('milkPerson').value,date:$('milkDate').value,session:$('milkSession').value,litres:+$('milkLitres').value,rate:+$('milkRate').value,note:$('milkNote').value.trim(),paid:$('milkPaid').checked,updated:new Date().toISOString(),created:old?.created||new Date().toISOString()};if(!item.personId){alert('पहले व्यक्ति चुनें / Select a person');return}if(old)db.milk=db.milk.map(x=>x.id===id?item:x);else db.milk.push(item);resetMilk();save()});
+$('moneyForm').addEventListener('submit',e=>{e.preventDefault();let id=$('moneyId').value||crypto.randomUUID(),old=db.money.find(x=>x.id===id);let item={id,type:$('moneyType').value,personId:$('moneyPerson').value,date:$('moneyDate').value,amount:+$('moneyAmount').value,purpose:$('moneyPurpose').value,method:$('moneyMethod').value,ref:$('moneyRef').value.trim(),note:$('moneyNote').value.trim(),updated:new Date().toISOString(),created:old?.created||new Date().toISOString()};if(old)db.money=db.money.map(x=>x.id===id?item:x);else db.money.push(item);resetMoney();save()});
+function editPerson(id){let p=db.people.find(x=>x.id===id);if(!p)return;$('personId').value=p.id;$('personType').value=p.type;$('personName').value=p.name;$('personPhone').value=p.phone;$('personAddress').value=p.address;$('personRate').value=p.rate;showTab('people',document.querySelector('[data-tab="people"]'));window.scrollTo({top:0,behavior:'smooth'})}
+function editMilk(id){let x=db.milk.find(x=>x.id===id);if(!x)return;$('milkId').value=x.id;$('milkType').value=x.type;refreshPersonOptions();$('milkPerson').value=x.personId;$('milkDate').value=x.date;$('milkSession').value=x.session;$('milkLitres').value=x.litres;$('milkRate').value=x.rate;$('milkNote').value=x.note;$('milkPaid').checked=x.paid;showTab('milk',document.querySelector('[data-tab="milk"]'));window.scrollTo({top:0,behavior:'smooth'})}
+function editMoney(id){let x=db.money.find(x=>x.id===id);if(!x)return;$('moneyId').value=x.id;$('moneyType').value=x.type;refreshPersonOptions();$('moneyPerson').value=x.personId;$('moneyDate').value=x.date;$('moneyAmount').value=x.amount;$('moneyPurpose').value=x.purpose;$('moneyMethod').value=x.method;$('moneyRef').value=x.ref;$('moneyNote').value=x.note;showTab('money',document.querySelector('[data-tab="money"]'));window.scrollTo({top:0,behavior:'smooth'})}
+function delRecord(collection,id){if(!confirm('क्या आप इस रिकॉर्ड को हटाना चाहते हैं? / Delete this record?'))return;db[collection]=db[collection].filter(x=>x.id!==id);save()}
+function renderPeople(){$('peopleTable').innerHTML=db.people.length?`<table><thead><tr><th>नाम / Name</th><th>प्रकार / Type</th><th>मोबाइल / Phone</th><th>काम</th></tr></thead><tbody>${db.people.map(p=>`<tr><td>${esc(p.name)}<span class="sub">${esc(p.address)}</span></td><td>${typeName(p.type)}</td><td>${esc(p.phone||'—')}</td><td><button class="small secondary" onclick="editPerson('${p.id}')">Edit</button> <button class="small danger" onclick="delRecord('people','${p.id}')">×</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">अभी कोई व्यक्ति नहीं जोड़ा गया।</div>';refreshPersonOptions()}
+function renderMilk(){$('milkTable').innerHTML=db.milk.length?`<table><thead><tr><th>तारीख / नाम</th><th>प्रकार</th><th>लीटर × भाव</th><th>कुल</th><th>काम</th></tr></thead><tbody>${[...db.milk].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<tr><td>${x.date}<span class="sub">${esc(personName(x.personId))} · ${x.session==='morning'?'सुबह':x.session==='evening'?'शाम':'अन्य'}</span></td><td>${x.type==='purchase'?'खरीद':'बिक्री'}${x.paid?'<span class="sub">पूरा भुगतान</span>':''}</td><td>${x.litres} × ${money(x.rate)}</td><td>${money(x.litres*x.rate)}</td><td><button class="small secondary" onclick="editMilk('${x.id}')">Edit</button> <button class="small danger" onclick="delRecord('milk','${x.id}')">×</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">अभी दूध की एंट्री नहीं है।</div>'}
+function renderMoney(){$('moneyTable').innerHTML=db.money.length?`<table><thead><tr><th>तारीख / व्यक्ति</th><th>प्रकार / कारण</th><th>तरीका</th><th>रकम</th><th>काम</th></tr></thead><tbody>${[...db.money].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<tr><td>${x.date}<span class="sub">${esc(personName(x.personId))}</span></td><td>${({received:'पैसा आया',paid:'पैसा दिया',expense:'खर्च'})[x.type]}<span class="sub">${purposeName(x.purpose)} · ${esc(x.note||'')}</span></td><td>${({cash:'नकद',upi:'UPI',bank:'बैंक'})[x.method]}<span class="sub">${esc(x.ref)}</span></td><td>${money(x.amount)}</td><td><button class="small secondary" onclick="editMoney('${x.id}')">Edit</button> <button class="small danger" onclick="delRecord('money','${x.id}')">×</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">अभी लेन-देन दर्ज नहीं है।</div>'}
+function renderReports(){let period=$('reportPeriod').value,date=$('reportDate').value||today(),month=date.slice(0,7);let filter=x=>period==='all'?true:period==='month'?x.date?.startsWith(month):x.date===date;let m=db.milk.filter(filter),pay=db.money.filter(filter);let buy=m.filter(x=>x.type==='purchase'),sale=m.filter(x=>x.type==='sale');let sum=a=>a.reduce((s,x)=>s+(x.amount??x.litres*x.rate),0);let received=sum(pay.filter(x=>x.type==='received')),paid=sum(pay.filter(x=>x.type==='paid')),expenses=sum(pay.filter(x=>x.type==='expense'));let rows=[['खरीदा दूध / Purchased litres',buy.reduce((s,x)=>s+x.litres,0)+' L'],['खरीद लागत / Purchase value',money(sum(buy))],['बेचा दूध / Sold litres',sale.reduce((s,x)=>s+x.litres,0)+' L'],['बिक्री रकम / Sales value',money(sum(sale))],['पैसा आया / Received',money(received)],['पैसा दिया / Paid',money(paid)],['बिजनेस खर्च / Expenses',money(expenses)],['बिक्री-खरीद अंतर / Sales minus purchases',money(sum(sale)-sum(buy))]];$('reportSummary').innerHTML=`<div class="table-wrap"><table><tbody>${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table></div><p class="notice">यह रिपोर्ट चुनी गई तारीख/अवधि की एंट्री दिखाती है। ग्राहक-विक्रेता का वास्तविक बकाया निकालने के लिए भुगतान को संबंधित बिल/खरीद से मिलाने वाला अगला अकाउंटिंग चरण आवश्यक है।</p>`}
+function renderDashboard(){let d=today(),month=d.slice(0,7),tm=db.milk.filter(x=>x.date===d),mm=db.milk.filter(x=>x.date.startsWith(month)),tp=db.money.filter(x=>x.date===d);let buy=tm.filter(x=>x.type==='purchase'),sale=tm.filter(x=>x.type==='sale'),sum=a=>a.reduce((s,x)=>s+(x.amount??x.litres*x.rate),0);$('todayBuyLitres').textContent=buy.reduce((s,x)=>s+x.litres,0)+' L';$('todayBuyMoney').textContent=money(sum(buy))+' खरीद लागत';$('todaySellLitres').textContent=sale.reduce((s,x)=>s+x.litres,0)+' L';$('todaySellMoney').textContent=money(sum(sale))+' बिक्री';$('todayReceived').textContent=money(sum(tp.filter(x=>x.type==='received')));$('todayPaid').textContent=money(sum(tp.filter(x=>x.type==='paid'||x.type==='expense')));$('monthSales').textContent=money(sum(mm.filter(x=>x.type==='sale')));$('monthPurchases').textContent=money(sum(mm.filter(x=>x.type==='purchase')));
+let dueCustomers=0,dueSuppliers=0;for(let p of db.people){let milkFor=db.milk.filter(x=>x.personId===p.id);let msum=sum(milkFor.filter(x=>x.type==='sale'))-sum(milkFor.filter(x=>x.type==='purchase'));let payments=db.money.filter(x=>x.personId===p.id);let balance=msum-sum(payments.filter(x=>x.type==='received'))+sum(payments.filter(x=>x.type==='paid'));if(p.type==='customer')dueCustomers+=Math.max(0,balance);if(p.type==='supplier')dueSuppliers+=Math.max(0,-balance)}$('receivable').textContent=money(dueCustomers);$('payable').textContent=money(dueSuppliers);
+let recent=[...db.milk.map(x=>({...x,kind:'milk',amt:x.litres*x.rate})),...db.money.map(x=>({...x,kind:'money',amt:x.amount}))].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,8);$('recent').innerHTML=recent.length?`<div class="table-wrap"><table><thead><tr><th>तारीख</th><th>विवरण</th><th>रकम</th><th>सुधार</th></tr></thead><tbody>${recent.map(x=>`<tr><td>${x.date}</td><td>${x.kind==='milk'?(x.type==='purchase'?'दूध खरीद':'दूध बिक्री')+' · '+esc(personName(x.personId))+' · '+x.litres+' L':({received:'पैसा आया',paid:'पैसा दिया',expense:'खर्च'})[x.type]+' · '+purposeName(x.purpose)+' · '+esc(personName(x.personId))}</td><td>${money(x.amt)}</td><td><button class="small secondary" onclick="${x.kind==='milk'?`editMilk('${x.id}')`:`editMoney('${x.id}')`}">Edit</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">एंट्री जोड़ने के बाद हाल का हिसाब यहाँ दिखेगा।</div>'}
+function renderAll(){renderPeople();renderMilk();renderMoney();renderDashboard();renderReports();refreshBillPeople()}
+function exportCSV(){let lines=[['section','date','name','type','litres','rate','amount','purpose','method','note']];db.milk.forEach(x=>lines.push(['milk',x.date,personName(x.personId),x.type,x.litres,x.rate,x.litres*x.rate,'','',x.note]));db.money.forEach(x=>lines.push(['money',x.date,personName(x.personId),x.type,'','',x.amount,x.purpose,x.method,(x.note||'')+' '+(x.ref||'')]));let csv=lines.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));a.download='dairy-report.csv';a.click();URL.revokeObjectURL(a.href)}
+
+function refreshBillPeople(){
+ const sel=$('billPerson'); if(!sel)return;
+ const old=sel.value;
+ sel.innerHTML='<option value="">ग्राहक चुनें / Select customer</option>'+db.people.filter(p=>p.type==='customer').map(p=>`<option value="${p.id}">${esc(p.name)}${p.phone?' · '+esc(p.phone):''}</option>`).join('');
+ if([...sel.options].some(o=>o.value===old))sel.value=old;
+}
+function generateBill(){
+ const pid=$('billPerson').value, month=$('billMonth').value;
+ if(!pid||!month){alert('ग्राहक और महीना चुनें / Select customer and month');return}
+ const p=db.people.find(x=>x.id===pid); if(!p)return;
+ const rows=db.milk.filter(x=>x.personId===pid&&x.type==='sale'&&x.date.startsWith(month)).sort((a,b)=>a.date.localeCompare(b.date));
+ const payments=db.money.filter(x=>x.personId===pid&&x.type==='received'&&x.date.startsWith(month));
+ const total=rows.reduce((s,x)=>s+x.litres*x.rate,0), litres=rows.reduce((s,x)=>s+x.litres,0);
+ const paid=payments.reduce((s,x)=>s+x.amount,0), opening=Number($('billOpening').value)||0, due=opening+total-paid;
+ const [yy,mm]=month.split('-'); const monthLabel=new Date(Number(yy),Number(mm)-1,1).toLocaleDateString('hi-IN',{month:'long',year:'numeric'});
+ const lines=rows.map(x=>`<tr><td>${esc(x.date)}</td><td>${x.session==='morning'?'सुबह':x.session==='evening'?'शाम':'अन्य'}</td><td>${x.litres.toFixed(2)}</td><td>${money(x.rate)}</td><td>${money(x.litres*x.rate)}</td></tr>`).join('');
+ $('billPreview').innerHTML=`<div id="billPaper" class="bill-paper"><div class="bill-brand">🥛 AMRIT FRESH MILK</div><h3>मासिक दूध बिल / Monthly Milk Bill</h3><div class="tagline">शुद्धता • ताजगी • सेहत</div><div class="bill-meta"><div><b>ग्राहक:</b> ${esc(p.name)}<br><b>मोबाइल:</b> ${esc(p.phone||'—')}</div><div><b>महीना:</b> ${esc(monthLabel)}<br><b>बिल तारीख:</b> ${today()}</div></div><table><thead><tr><th>तारीख</th><th>समय</th><th>लीटर</th><th>भाव</th><th>रकम</th></tr></thead><tbody>${lines||'<tr><td colspan="5" style="text-align:center">इस महीने बिक्री की एंट्री नहीं है।</td></tr>'}</tbody></table><table><tbody><tr><th>कुल दूध / Total litres</th><td>${litres.toFixed(2)} L</td></tr><tr><th>इस महीने की बिक्री</th><td>${money(total)}</td></tr><tr><th>पिछला बकाया</th><td>${money(opening)}</td></tr><tr><th>इस महीने जमा</th><td>− ${money(paid)}</td></tr></tbody></table><div class="bill-total">कुल बकाया / Balance Due: ${money(due)}</div><div class="tagline">धन्यवाद! / Thank you!</div></div>`;
+ window.currentBill={pid,month,name:p.name,phone:p.phone||'',total,paid,opening,due,litres};
+}
+function downloadBillPDF(){if(!window.currentBill){generateBill();if(!window.currentBill)return}const paper=$('billPaper');if(!paper)return;const w=window.open('','_blank');if(!w){alert('पॉप-अप ब्लॉक है। ब्राउज़र में pop-up अनुमति दें।');return}w.document.write('<html><head><title>Amrit Fresh Milk Bill</title><meta charset="utf-8"><style>body{font-family:Arial,sans-serif;padding:20px;color:#17231c}.bill-paper{max-width:700px;margin:auto}.bill-brand{text-align:center;color:#176b45;font-weight:bold;font-size:24px}.bill-paper h3{text-align:center}.tagline{text-align:center;color:#637169}.bill-meta{display:flex;justify-content:space-between;margin:18px 0}table{width:100%;border-collapse:collapse;margin:10px 0}th,td{border:1px solid #ddd;padding:8px;text-align:left}.bill-total{text-align:right;font-weight:bold;font-size:18px;margin-top:18px}@media print{button{display:none}}</style></head><body>'+paper.outerHTML+'<script>window.onload=()=>window.print()<\\/script></body></html>');w.document.close()}
+async function downloadBillImage(){
+ if(!window.currentBill){generateBill();if(!window.currentBill)return}
+ const b=window.currentBill,p=db.people.find(x=>x.id===b.pid),rows=db.milk.filter(x=>x.personId===b.pid&&x.type==='sale'&&x.date.startsWith(b.month)).sort((a,c)=>a.date.localeCompare(c.date));
+ const hi=lang==='hi';
+ const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+ const rowH=46, top=360, bottom=330; canvas.width=1200;canvas.height=Math.max(1120,top+rows.length*rowH+bottom);
+ const W=canvas.width,H=canvas.height;
+ // Clean, printable invoice design with decorative header and border.
+ ctx.fillStyle='#f3f8f4';ctx.fillRect(0,0,W,H);
+ ctx.fillStyle='#ffffff';ctx.fillRect(28,28,W-56,H-56);
+ ctx.strokeStyle='#176b45';ctx.lineWidth=5;ctx.strokeRect(28,28,W-56,H-56);
+ ctx.fillStyle='#176b45';ctx.fillRect(30,30,W-60,210);
+ ctx.fillStyle='#d7f1df';ctx.beginPath();ctx.arc(1050,75,145,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(1050,75,105,0,Math.PI*2);ctx.fill();
+ ctx.textAlign='center';ctx.fillStyle='#176b45';ctx.font='bold 62px Arial';ctx.fillText('🥛',1050,100);
+ ctx.textAlign='left';ctx.fillStyle='#ffffff';ctx.font='bold 44px Arial';ctx.fillText('AMRIT FRESH MILK',75,100);
+ ctx.font='24px Arial';ctx.fillStyle='#e1f5e7';ctx.fillText(hi?'शुद्धता • ताजगी • सेहत':'PURE • FRESH • HEALTHY',78,145);
+ ctx.font='bold 30px Arial';ctx.fillStyle='#ffffff';ctx.fillText(hi?'मासिक दूध बिल':'MONTHLY MILK BILL',78,200);
+ // Customer and period details
+ let y=290;ctx.fillStyle='#17231c';ctx.font='bold 25px Arial';ctx.fillText(hi?'ग्राहक का नाम':'Customer name',75,y);ctx.font='28px Arial';ctx.fillText(p.name,75,y+42);
+ ctx.font='bold 25px Arial';ctx.fillText(hi?'मोबाइल नंबर':'Mobile number',650,y);ctx.font='28px Arial';ctx.fillText(p.phone||'—',650,y+42);
+ ctx.font='bold 25px Arial';ctx.fillText(hi?'बिल का महीना':'Billing month',75,y+100);ctx.font='27px Arial';ctx.fillText(b.month,300,y+100);
+ ctx.font='bold 25px Arial';ctx.fillText(hi?'बिल की तारीख':'Bill date',650,y+100);ctx.font='27px Arial';ctx.fillText(today(),820,y+100);
+ y=top;
+ ctx.fillStyle='#176b45';ctx.fillRect(60,y-35,W-120,52);
+ ctx.fillStyle='#ffffff';ctx.font='bold 22px Arial';ctx.textAlign='left';
+ const headers=hi?['तारीख','समय','लीटर','भाव (₹)','रकम (₹)']:['Date','Session','Litres','Rate (₹)','Amount (₹)'];
+ const xs=[78,285,515,700,900];headers.forEach((h,i)=>ctx.fillText(h,xs[i],y));
+ y+=58;ctx.font='22px Arial';
+ rows.forEach((x,i)=>{if(i%2===0){ctx.fillStyle='#f0f7f2';ctx.fillRect(60,y-31,W-120,rowH)}ctx.fillStyle='#17231c';const vals=[x.date,hi?(x.session==='morning'?'सुबह':x.session==='evening'?'शाम':'अन्य'):(x.session==='morning'?'Morning':x.session==='evening'?'Evening':'Other'),x.litres.toFixed(2),Number(x.rate).toLocaleString('en-IN'),Number(x.litres*x.rate).toLocaleString('en-IN')];vals.forEach((v,i)=>ctx.fillText(String(v),xs[i],y));y+=rowH});
+ if(!rows.length){ctx.fillStyle='#637169';ctx.font='23px Arial';ctx.fillText(hi?'इस महीने दूध बिक्री की एंट्री नहीं है।':'No milk sale entries for this month.',78,y);y+=rowH}
+ y+=24;ctx.strokeStyle='#dce5df';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(60,y);ctx.lineTo(W-60,y);ctx.stroke();y+=52;
+ const summary=hi?[['कुल दूध',b.litres.toFixed(2)+' लीटर'],['इस महीने की बिक्री',money(b.total)],['पिछला बकाया',money(b.opening)],['इस महीने जमा',money(b.paid)]]:[['Total milk',b.litres.toFixed(2)+' L'],['Sales this month',money(b.total)],['Previous balance',money(b.opening)],['Paid this month',money(b.paid)]];
+ ctx.font='bold 25px Arial';summary.forEach((r)=>{ctx.fillStyle='#33483b';ctx.fillText(r[0],78,y);ctx.textAlign='right';ctx.fillStyle='#17231c';ctx.fillText(r[1],W-80,y);ctx.textAlign='left';y+=44});
+ y+=15;ctx.fillStyle='#e8f5ec';ctx.fillRect(60,y-30,W-120,85);ctx.fillStyle='#176b45';ctx.font='bold 30px Arial';ctx.fillText(hi?'कुल बकाया राशि':'TOTAL BALANCE DUE',82,y+8);ctx.textAlign='right';ctx.font='bold 36px Arial';ctx.fillText(money(b.due),W-82,y+8);ctx.textAlign='left';
+ y+=100;ctx.strokeStyle='#dce5df';ctx.beginPath();ctx.moveTo(60,y);ctx.lineTo(W-60,y);ctx.stroke();y+=45;ctx.textAlign='center';ctx.fillStyle='#176b45';ctx.font='bold 24px Arial';ctx.fillText(hi?'आपके विश्वास के लिए धन्यवाद!':'Thank you for your trust!',W/2,y);ctx.fillStyle='#637169';ctx.font='19px Arial';ctx.fillText(hi?'किसी भी जानकारी के लिए कृपया संपर्क करें।':'Please contact us if you have any questions.',W/2,y+34);
+ const a=document.createElement('a');a.download='Amrit-Fresh-Milk-Bill-'+b.month+'-'+(hi?'Hindi':'English')+'.png';a.href=canvas.toDataURL('image/png');a.click();
+}
+function shareBillWhatsApp(){
+ if(!window.currentBill){generateBill();if(!window.currentBill)return}
+ const b=window.currentBill;const msg=`Amrit Fresh Milk — ${b.month} का दूध बिल\\nग्राहक: ${b.name}\\nकुल बिक्री: ${money(b.total)}\\nजमा पैसा: ${money(b.paid)}\\nकुल बकाया: ${money(b.due)}\\nकृपया भुगतान करें।`;
+ const phone=b.phone.replace(/\D/g,'');const url='https://wa.me/'+(phone.length===10?'91'+phone:phone)+'?text='+encodeURIComponent(msg);
+ window.open(url,'_blank');
+}
+function shareBillSMS(){
+ if(!window.currentBill){generateBill();if(!window.currentBill)return}
+ const b=window.currentBill;const msg=`Amrit Fresh Milk: ${b.month} bill. Sales ${money(b.total)}, paid ${money(b.paid)}, balance due ${money(b.due)}. Please pay.`;
+ const phone=b.phone.replace(/\D/g,'');window.location.href='sms:'+phone+'?body='+encodeURIComponent(msg);
+}
+
+$('milkDate').value=today();$('moneyDate').value=today();$('reportDate').value=today();$('billMonth').value=today().slice(0,7);renderAll();refreshBillPeople();
+</script>
+<script>
+(()=>{
+ const $id=id=>document.getElementById(id); let mode='login', stage='credentials', pendingPurpose='';
+ const apiBase=''; const deviceKey='amrit_fresh_milk_device';
+ let deviceId=localStorage.getItem(deviceKey); if(!deviceId){deviceId=(crypto.randomUUID?crypto.randomUUID():('dev-'+Date.now()+'-'+Math.random().toString(16).slice(2)));localStorage.setItem(deviceKey,deviceId)}
+ const tokenKey='amrit_fresh_milk_auth_token';
+ function setError(m){$id('authError').textContent=m||''}
+ function view(){const reg=mode==='register';$id('registerFields').classList.toggle('hidden',!reg);$id('loginFields').classList.toggle('hidden',reg||stage==='otp');$id('otpFields').classList.toggle('hidden',stage!=='otp');$id('resendOtp').classList.toggle('hidden',stage!=='otp');$id('primaryAuth').textContent=stage==='otp'?'OTP सत्यापित करें / Verify OTP':(reg?'OTP भेजें / Send OTP':'OTP भेजकर लॉगिन / Login with OTP');setError('')}
+ function unlock(){document.body.classList.remove('auth-locked');$id('authGate').style.display='none'}
+ function lock(msg){document.body.classList.add('auth-locked');$id('authGate').style.display='flex';stage='credentials';view();if(msg)setError(msg)}
+ async function req(path,body){const r=await fetch(apiBase+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await r.json().catch(()=>({error:'सर्वर से सही जवाब नहीं मिला'}));if(!r.ok)throw new Error(data.error||'अनुरोध असफल हुआ');return data}
+ async function verifySession(){const t=localStorage.getItem(tokenKey);if(!t){lock();return}try{const r=await fetch('/api/auth/me',{headers:{Authorization:'Bearer '+t}});if(!r.ok)throw new Error('यह लॉगिन अब सक्रिय नहीं है। कृपया दोबारा लॉगिन करें।');unlock()}catch(e){localStorage.removeItem(tokenKey);lock(e.message)}}
+ $id('showLogin').onclick=()=>{mode='login';stage='credentials';view()};$id('showRegister').onclick=()=>{mode='register';stage='credentials';view()};
+ async function start(){if(mode==='register'){
+   const name=$id('regName').value.trim(),phone=$id('regPhone').value.trim(),email=$id('regEmail').value.trim(),password=$id('regPassword').value;
+   const d=await req('/api/auth/register/start',{name,phone,email,password,deviceId});pendingPurpose='register';
+ }else{const identifier=$id('loginIdentifier').value.trim(),password=$id('loginPassword').value;await req('/api/auth/login/start',{identifier,password,deviceId});pendingPurpose='login'}stage='otp';view();setError('OTP आपके पंजीकृत ईमेल पर भेज दिया गया है।')}
+ async function finish(){const code=$id('otpCode').value.trim();if(!/^\d{6}$/.test(code))throw new Error('कृपया 6 अंकों का OTP डालें।');let d;if(pendingPurpose==='register'){d=await req('/api/auth/register/verify',{email:$id('regEmail').value.trim(),code,deviceId})}else{d=await req('/api/auth/login/verify',{identifier:$id('loginIdentifier').value.trim(),code,deviceId})}localStorage.setItem(tokenKey,d.token);unlock();setError('')}
+ $id('authForm').addEventListener('submit',async e=>{e.preventDefault();setError('');$id('primaryAuth').disabled=true;try{if(stage==='otp')await finish();else await start()}catch(err){setError(err.message)}finally{$id('primaryAuth').disabled=false}});
+ $id('resendOtp').onclick=async()=>{setError('');try{if(mode==='register'){await req('/api/auth/register/start',{name:$id('regName').value.trim(),phone:$id('regPhone').value.trim(),email:$id('regEmail').value.trim(),password:$id('regPassword').value,deviceId})}else{await req('/api/auth/login/start',{identifier:$id('loginIdentifier').value.trim(),password:$id('loginPassword').value,deviceId})}setError('नया OTP भेज दिया गया है।')}catch(e){setError(e.message)}};
+ verifySession();view();setInterval(async()=>{if(localStorage.getItem(tokenKey)&&!document.body.classList.contains('auth-locked')){try{const r=await fetch('/api/auth/me',{headers:{Authorization:'Bearer '+localStorage.getItem(tokenKey)}});if(!r.ok){localStorage.removeItem(tokenKey);lock('यह फोन लॉगआउट हो गया है क्योंकि अकाउंट किसी दूसरे फोन पर लॉगिन हुआ है।')}}catch(e){/* keep current screen during temporary network outage */}}},20000);
+ window.addEventListener('storage',e=>{if(e.key===tokenKey&&!e.newValue)lock('लॉगआउट किया गया है।')});
+})();
+</script>
+</body></html>
